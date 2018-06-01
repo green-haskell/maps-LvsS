@@ -1,0 +1,66 @@
+module Main where
+
+
+import Criterion.Main
+
+import Criterion.Types (
+    Config ( .. )
+    )
+
+
+-- DO NOT delete the following import line!
+
+--import qualified <MapImplementation> as M
+
+
+-- ---------- ---------- ---------- ---------- ---------- ---------- ----------
+
+import BenchmarksConfig
+
+import Defs
+
+import Ops
+
+import Environments
+
+
+-- ---------- ---------- ---------- ---------- ---------- ---------- ----------
+
+-- Benchmarks
+
+main =
+    defaultMainWith myBenchmarkConfig [
+
+        bgroup ( "Map/" ++ "<MapImplementation>" ) [
+
+            env addEnvSetup $ \ ~a -> bench addOpDesc $ nf ( addNDistinctFrom a addFromNElems ) 0
+
+            , env addAllEnvSetup $ \ ~( a , b ) -> bench addAllOpDesc $ nf ( addAllNTimes a b ) addAllNRepeats
+
+            , env clearEnvSetup $ \ ~a -> bench clearOpDesc $ nf clear a
+
+            , env containsEnvSetup $ \ ~a -> bench containsOpDesc $ nf ( containsNTimes a containsElement ) containsNRepeats
+
+            , env containsAllEnvSetup $ \ ~( a , b ) -> bench containsAllOpDesc $ nf ( containsAllNTimes a b ) containsAllNRepeats
+
+            , env iteratorEnvSetup $ \ ~a -> bench iteratorOpDesc $ nf iterator a
+
+            {---- This worked!
+            , env removeEnvSetup $ \ ~a -> bench removeOpDesc $ nf ( removeNTimes a ) removeNRepeats
+            --}
+
+            -- This is an experiment!
+            , env removeEnvSetup $ \ ~( a , ks ) -> bench removeOpDesc $ nf ( removeNTimes a ) ks
+
+            , env removeAllEnvSetup $ \ ~( a , b ) -> bench removeAllOpDesc $ nf ( removeAllNTimes a b ) removeAllNRepeats
+
+            , env retainAllEnvSetup $ \ ~( a , b ) -> bench retainAllOpDesc $ nf ( retainAllNTimes a b ) retainAllNRepeats
+
+            , env toListEnvSetup $ \ ~a -> bench toListOpDesc $ nf ( toListNTimes a ) toListNRepeats
+        ]
+    ]
+
+
+-- ---------- ---------- ---------- ---------- ---------- ---------- ----------
+
+

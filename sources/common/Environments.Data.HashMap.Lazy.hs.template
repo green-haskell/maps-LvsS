@@ -1,0 +1,134 @@
+module Environments where
+
+
+import qualified Data.HashMap.Lazy as M
+
+import           System.Random
+
+
+-- ---------- ---------- ---------- ---------- ---------- ---------- ----------
+
+import Defs
+
+import Ops
+
+import Types
+
+
+-- ---------- ---------- ---------- ---------- ---------- ---------- ----------
+
+-- Benchmarks environment setup functions
+
+
+    -- ---------- ---------- ---------- ---------- ---------- ----------
+
+defaultEnv :: IO ( M.HashMap Key Datum )
+defaultEnv = return ( addNDistinctFrom M.empty baseNElems 0 )
+
+
+    -- ---------- ---------- ---------- ---------- ---------- ----------
+
+addEnvSetup :: IO ( M.HashMap Key Datum )
+addEnvSetup = do
+    --return ( addNDistinctFrom M.empty addToNElems 0 )
+    defaultEnv -- TODO: Should this be empty?
+
+
+    -- ---------- ---------- ---------- ---------- ---------- ----------
+
+addAllEnvSetup :: IO ( M.HashMap Key Datum , M.HashMap Key Datum )
+addAllEnvSetup = do
+    let
+        b = addNDistinctFrom M.empty addAllFromNElems 0
+    a <- defaultEnv
+    return ( a , b )
+
+
+    -- ---------- ---------- ---------- ---------- ---------- ----------
+
+clearEnvSetup :: IO ( M.HashMap Key Datum )
+clearEnvSetup = do
+    return ( addNDistinctFrom M.empty clearNElems 0 )
+
+
+    -- ---------- ---------- ---------- ---------- ---------- ----------
+
+containsEnvSetup :: IO ( M.HashMap Key Datum )
+containsEnvSetup = do
+    defaultEnv
+
+
+    -- ---------- ---------- ---------- ---------- ---------- ----------
+
+containsAllEnvSetup :: IO ( M.HashMap Key Datum , M.HashMap Key Datum )
+containsAllEnvSetup = do
+    let
+        a = addNDistinctFrom M.empty containsAllSearchInNElems 0
+        b = addNDistinctFrom M.empty containsAllSearchForNElems 0
+    return ( a , b )
+
+
+    -- ---------- ---------- ---------- ---------- ---------- ----------
+
+iteratorEnvSetup :: IO ( M.HashMap Key Datum )
+iteratorEnvSetup = defaultEnv
+
+
+    -- ---------- ---------- ---------- ---------- ---------- ----------
+
+{---- This worked!
+removeEnvSetup :: IO ( M.HashMap Key Datum )
+removeEnvSetup = return ( addNDistinctFrom M.empty removeFromNElems 0 )
+--}
+
+{--- This is an experiment! That works!
+removeEnvSetup :: IO ( M.HashMap Key Datum , [ Key ])
+removeEnvSetup = return (   addNDistinctFrom M.empty removeFromNElems 0
+                          , {-force??-} take ( removeNRepeats `div` 2 ) (randomRs ( 0 , removeFromNElems - 1 ) ( mkStdGen 0 ) :: [ Key ] ) ++ ( replicate ( ( removeNRepeats `div` 2 ) + 1 ) 999999 )
+                        )
+-}
+
+-- This is an experiment!
+removeEnvSetup :: IO ( M.HashMap Key Datum , [ Key ])
+removeEnvSetup = return (
+      addNDistinctFrom M.empty removeFromNElems 0
+    , {-force??-} take n (randomRs ( lo , hi ) ( mkStdGen 0 ) :: [ Key ] ) ++ ( replicate m 999999 )
+    )
+    where
+        b = removeNRepeats `div` 2
+        ( n , m ) = if ( even removeNRepeats ) then ( b , b ) else ( b , b + 1 )
+        ( lo , hi ) = ( 0 , removeFromNElems - 1 )
+
+
+    -- ---------- ---------- ---------- ---------- ---------- ----------
+
+removeAllEnvSetup :: IO ( M.HashMap Key Datum , M.HashMap Key Datum )
+removeAllEnvSetup = do
+    let
+        a = addNDistinctFrom M.empty removeAllFromNElems 0
+        b = addNDistinctFrom M.empty removeAllNElems 0
+    return ( a , b )
+
+
+    -- ---------- ---------- ---------- ---------- ---------- ----------
+
+retainAllEnvSetup :: IO ( M.HashMap Key Datum , M.HashMap Key Datum )
+retainAllEnvSetup = do
+    let
+        a = addNDistinctFrom M.empty retainAllFromNElems 0
+        b = addNDistinctFrom M.empty retainAllToNElems 0
+    return ( a , b )
+
+
+    -- ---------- ---------- ---------- ---------- ---------- ----------
+
+toListEnvSetup :: IO ( M.HashMap Key Datum )
+toListEnvSetup = return ( addNDistinctFrom M.empty toListFromNElems 0 )
+
+
+    -- ---------- ---------- ---------- ---------- ---------- ----------
+
+
+-- ---------- ---------- ---------- ---------- ---------- ---------- ----------
+
+
