@@ -1,15 +1,9 @@
-git clone https://github.com/green-haskell/criterion.git
-
 git clone https://github.com/green-haskell/maps-LvsS.git
 
-cd maps-LvsS
+bash ./maps-LvsS/installDependencies.sh
 
-cabal sandbox init
+\#To run, as root:
 
-cabal sandbox add-source ../criterion/
+cd maps-LvsS ; make 2>&1 | tee fullOutput.txt
 
-cabal install --dependencies-only
 
-\#To run: as root, in the maps-LvsS directory:
-
-make 2>&1 | tee fullOutput.txt
