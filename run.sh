@@ -17,9 +17,9 @@ function patchFilesForMapImplementation () {
 
     echo -e "    ${RED}Started patching files for '$1'${NC}\n"
 
-    cd ./sources/benchmarkForOneMapImpl/ ; sh ./patch.sh $mapImplementation ; cd ../..
+    cd ./sources/benchmarkForOneMapImpl/ ; sh ./patch.sh $1 ; cd ../..
 
-    cd ./sources/common/ ; sh ./patch.sh $mapImplementation ; cd ../..
+    cd ./sources/common/ ; sh ./patch.sh $1 ; cd ../..
  
     echo -e "    ${RED}Finished patching files for '$1'${NC}\n"
 
