@@ -1,6 +1,6 @@
 This repository holds the code, used to run the experiments, for the paper:
 
-[Evaluation of the impact on energy consumption of lazy versus strict evaluation of data-structures](http://green-haskell.github.io/energy_consumption-lazy_vs_strict_evaluation_of_data-structures/index.html)
+[Evaluation of the impact on energy consumption of lazy versus strict evaluation of Haskell data-structures](http://green-haskell.github.io/energy_consumption-lazy_vs_strict_evaluation_of_data-structures/index.html)
 
 Execute the following commands in the desired directory.
 
